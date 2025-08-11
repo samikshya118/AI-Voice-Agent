@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Voice Agent & Echo Bot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #272583, #0a0a2a);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      padding: 40px 20px;
+    }
+    .wrapper {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    .card {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+    }
+    .card h2 {
+      color: #00ffff;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+    .card p {
+      text-align: center;
+      margin-top: 15px;
+      color: #ccc;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      box-sizing: border-box;
+      background-color: #1c1c1c;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    button {
+      display: inline-block;
+      background-color: #00ffff;
+      color: #000;
+      padding: 12px 25px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin: 5px;
+    }
+    button:hover {
+      background-color: #00cccc;
+      transform: scale(1.05);
+    }
+    audio {
+      width: 100%;
+      margin-top: 15px;
+      border-radius: 8px;
+    }
+    .transcript {
+      text-align: center;
+      margin-top: 15px;
+      color: #f55;
+    }
+    #fileInfo {
+      text-align: center;
+      margin-top: 10px;
+      color: #aaf;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+
+    <div class="card">
+      <h2>Voice Agent</h2>
+      <input id="text-input" type="text" placeholder="Type something and click Generate Audio..." />
+      <button onclick="generateAudio()">Generate Audio</button>
+      <audio id="audio-player" controls></audio>
+      <p>Try saying: “Hello, how can I help you today?”</p>
+    </div>
+
+    <div class="card">
+      <h2>AI Conversational Bot</h2>
+      <p>Record your voice, send it to the AI, and hear the reply.</p>
+      <div style="text-align: center;">
+        <button id="startRecording">Start Recording</button>
+        <button id="stopRecording" disabled>Stop Recording</button>
+      </div>
+      <audio id="echoPlayer" controls></audio>
+
+      <!-- ✅ File Info Display -->
+      <div id="fileInfo"></div>
+
+      <!-- ✅ Transcription Result -->
+      <div class="transcript" id="transcriptionResult"></div>
+    </div>
+
+  </div>
+
+  <script>
+    async function generateAudio() {
+      const textInput = document.getElementById("text-input").value; // fixed ID
+      const response = await fetch("http://127.0.0.1:8000/generate-audio", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: textInput })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        document.getElementById("audio-player").src = data.audio_url; // fixed ID
+        document.getElementById("audio-player").play();
+      } else {
+        alert("Error generating audio");
+      }
+    }
+
+    let mediaRecorder;
+    let audioChunks = [];
+
+    document.getElementById("startRecording").addEventListener("click", async () => {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+      mediaRecorder.start();
+
+      mediaRecorder.addEventListener("dataavailable", event => {
+        audioChunks.push(event.data);
+      });
+
+      document.getElementById("startRecording").disabled = true;
+      document.getElementById("stopRecording").disabled = false;
+    });
+
+    document.getElementById("stopRecording").addEventListener("click", () => {
+      mediaRecorder.stop();
+
+      mediaRecorder.addEventListener("stop", async () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        const formData = new FormData();
+        formData.append("audio", audioBlob);
+
+        document.getElementById("fileInfo").innerText = "Processing...";
+
+        const response = await fetch("/llm/query", {
+          method: "POST",
+          body: formData
+        });
+
+        if (!response.ok) {
+          document.getElementById("fileInfo").innerText = "Error processing audio.";
+          return;
+        }
+
+        const data = await response.json();
+
+        if (data.user_transcription) {
+      document.getElementById("transcriptionResult").innerText = "You said: " + data.user_transcription;
+    }
+
+    if (data.llm_response) {
+      document.getElementById("transcriptionResult").innerText += "\nAI says: " + data.llm_response;
+    }
+
+    if (data.audio_url) {
+      document.getElementById("echoPlayer").src = data.audio_url;
+      document.getElementById("echoPlayer").play();
+    }
+
+
+        document.getElementById("fileInfo").innerText = "";
+      });
+
+      document.getElementById("startRecording").disabled = false;
+      document.getElementById("stopRecording").disabled = true;
+    });
+  </script>
+</body>
+</html>
