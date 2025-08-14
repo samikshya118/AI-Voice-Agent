@@ -59,6 +59,11 @@ The **frontend** handles audio capture and UI, while the **backend** orchestrate
 
 ---
 
+## 📸 Screenshot
+
+<img src="pictures/Ai_agent.png" alt="AI Voice Agent Screenshot" width="600">
+
+
 ## 🚀 Getting Started
 
 ### **Prerequisites**
