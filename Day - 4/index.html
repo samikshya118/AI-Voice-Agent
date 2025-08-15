@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Voice Assistant & Echo Bot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <style>
+        /* ===== Global Styles ===== */
+        body {
+            margin: 0;
+            padding: 40px 0; /* Top & bottom padding */
+            min-height: 100vh;
+            background: linear-gradient(135deg, #333bd4, #020a13);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            font-family: 'Segoe UI', sans-serif;
+            color: #fff;
+            box-sizing: border-box;
+        }
+
+        /* ===== Container ===== */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        /* ===== Card Styling ===== */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #e0e0e0;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        /* ===== Inputs & Buttons ===== */
+        textarea,
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 1rem;
+            border: none;
+            margin-bottom: 20px;
+            resize: vertical;
+            text-align: center;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        button {
+            background-color: #ffffff;
+            color: #2c3e50;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            margin: 5px;
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        button:hover {
+            background-color: #ecf0f1;
+            transform: scale(1.05);
+        }
+
+        /* ===== Audio Player ===== */
+        audio {
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- ===== AI Voice Agent Card ===== -->
+        <div class="card">
+            <h2 class="section-title">AI Voice Agent</h2>
+            <input id="text-input" type="text" placeholder="Type something and click Speak..." />
+            <button id="speak-btn" onclick="generateAudio()">Speak</button>
+            <audio id="audio-player" controls></audio>
+            <p class="subtitle">Try saying: “Hello, how can I help you today?”</p>
+        </div>
+
+        <!-- ===== Echo Bot Card ===== -->
+        <div class="card">
+            <h2 class="section-title">Echo Bot</h2>
+            <p class="subtitle">Record your voice and play it back instantly.</p>
+            <button id="startRecording">Start Recording</button>
+            <button id="stopRecording" disabled>Stop Recording</button>
+            <audio id="echoPlayer" controls></audio>
+        </div>
+    </div>
+
+    <script>
+        /* ===== Text-to-Speech ===== */
+        async function generateAudio() {
+            const text = document.getElementById("text-input").value;
+
+            const response = await fetch("/generate_audio", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text })
+            });
+
+            const data = await response.json();
+
+            if (data.audio_url) {
+                const audioPlayer = document.getElementById("audio-player");
+                audioPlayer.src = data.audio_url;
+                audioPlayer.load();
+                audioPlayer.play();
+            } else {
+                alert("No audio URL received.");
+            }
+        }
+
+        /* ===== Echo Bot Recording ===== */
+        let mediaRecorder;
+        let audioChunks = [];
+
+        const startBtn = document.getElementById("startRecording");
+        const stopBtn = document.getElementById("stopRecording");
+        const echoPlayer = document.getElementById("echoPlayer");
+
+        startBtn.addEventListener("click", async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const audioURL = URL.createObjectURL(audioBlob);
+                echoPlayer.src = audioURL;
+                echoPlayer.load();
+            };
+
+            mediaRecorder.start();
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+        });
+
+        stopBtn.addEventListener("click", () => {
+            mediaRecorder.stop();
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>
