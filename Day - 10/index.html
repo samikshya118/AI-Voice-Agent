@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Voice Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0d0033, #050018);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 0 0 25px rgba(0, 224, 255, 0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #00e0ff;
+            text-shadow: 0 0 8px rgba(0, 224, 255, 0.8);
+        }
+        #chat-box {
+            background: rgba(0, 0, 0, 0.2);
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .message {
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        .assistant {
+            background-color: rgba(57, 72, 103, 0.7);
+            align-self: flex-start;
+            color: #ffffff;
+        }
+        .user {
+            background-color: rgba(0, 224, 255, 0.8);
+            align-self: flex-end;
+            color: #000000;
+        }
+        .error {
+            background-color: rgba(233, 69, 96, 0.8);
+            align-self: center;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        select, button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        button {
+            cursor: pointer;
+            background: #00e0ff;
+            color: #000;
+            font-weight: bold;
+            box-shadow: 0 0 8px rgba(0, 224, 255, 0.8);
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background: #00bcd4;
+            transform: scale(1.05);
+        }
+        button:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        #status {
+            font-size: 14px;
+            color: #a0f7ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Voice Assistant</h1>
+        <div id="chat-box"></div>
+        <div class="controls">
+            <select id="voice-select">
+                <option value="Natalie">Natalie (Female)</option>
+                <option value="Matthew">Matthew (Male)</option>
+            </select>
+            <button id="start-btn">🎤 Start</button>
+            <button id="stop-btn">⏹ Stop</button>
+        </div>
+        <div id="status">Idle</div>
+        <audio id="audio-player" controls></audio>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
