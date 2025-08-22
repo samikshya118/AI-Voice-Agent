@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 18 - AI Voice Assistance</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #0a0025, #000010, #0a0018);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+      color: #e0e0ff;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(10, 0, 30, 0.85);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.2), 0 0 50px rgba(0, 200, 255, 0.15);
+      text-align: center;
+    }
+
+    .header-title {
+      font-weight: 700;
+      font-size: 1.7rem;
+      color: #00e6ff;
+      text-shadow: 0 0 8px rgba(0, 255, 255, 0.7);
+    }
+
+    .record-btn {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00f2ff, #007bff);
+      border: none;
+      color: white;
+      font-size: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1.5rem auto;
+      box-shadow: 0 0 15px rgba(0, 200, 255, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    .record-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 25px rgba(0, 200, 255, 0.9);
+    }
+
+    .instruction-text {
+        color: #66d9ff; 
+        font-size: 1rem;
+        margin-bottom: 1.2rem;
+        text-shadow: 0 0 6px rgba(0, 200, 255, 0.6);
+        font-style: italic;
+    }
+
+    .record-btn.recording {
+      background: linear-gradient(135deg, #ff0066, #ff1a1a);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 0, 102, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 20px rgba(255, 0, 102, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 0, 102, 0);
+      }
+    }
+
+    .status-display {
+      font-size: 1rem;
+      color: #a0b3ff;
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    .transcription-container {
+      background-color: rgba(20, 10, 40, 0.9);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      border: 1px solid rgba(0, 200, 255, 0.2);
+      box-shadow: inset 0 0 10px rgba(0, 200, 255, 0.1);
+      text-align: left;
+    }
+
+    .transcription-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #cfd9ff;
+      min-height: 50px;
+      font-style: italic;
+    }
+
+    .final-transcript {
+      font-weight: 600;
+      color: #00ffaa !important;
+      font-style: normal !important;
+    }
+
+    .transcription-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #00e6ff;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 4px rgba(0, 255, 255, 0.4);
+    }
+
+    .transcription-history {
+      background-color: rgba(10, 5, 25, 0.8);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      border: 1px solid rgba(0, 200, 255, 0.15);
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .transcription-history-item {
+      padding: 0.5rem;
+      border-bottom: 1px solid rgba(0, 200, 255, 0.1);
+    }
+
+    .history-timestamp {
+      font-size: 0.75rem;
+      color: #8899cc;
+      margin-bottom: 0.3rem;
+    }
+
+    .history-text {
+      font-size: 0.9rem;
+      color: #e0e0ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <h3 class="header-title">AI Voice Assistant</h3>
+    <p class="instruction-text">Press the button to start your conversation.</p>
+
+    
+    <button id="recordBtn" class="record-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16">
+        <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"/>
+        <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
+      </svg>
+    </button>
+
+    <div id="statusDisplay" class="status-display">Ready to chat!</div>
+
+    <div id="transcriptionDisplay" class="transcription-container d-none">
+      <div class="transcription-label">Current Turn:</div>
+      <div id="currentTranscript" class="transcription-text">Waiting for speech...</div>
+      
+      <div class="transcription-label mt-3">Conversation History:</div>
+      <div id="transcriptionHistory" class="transcription-history">
+        <div class="text-muted text-center" style="font-style: italic;">
+          Your completed turns will appear here...
+        </div>
+      </div>
+    </div>
+
+    <audio id="audioPlayer" hidden></audio>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/script.js"></script>
+</body>
+</html>
