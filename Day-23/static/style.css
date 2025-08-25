@@ -1,0 +1,122 @@
+/* static/style.css */
+body {
+    background-color: #080835; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #e0e0ff;
+}
+
+/* Chat Container */
+.chat-container {
+    width: 100%;
+    max-width: 600px;
+    background-color: rgba(10, 0, 30, 0.85); /* dark card */
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.2), 0 0 50px rgba(0, 200, 255, 0.15); /* cyan glow */
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+}
+
+/* Chat Log Area */
+.chat-log {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: #0d0d1a; /* deep chat background */
+    color: #e0e0e0;
+}
+
+/* Chat Bubbles */
+.message {
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 0.95rem;
+}
+
+.subtitle-text {
+    color: #00e6ff;
+    text-shadow: 0 0 8px rgba(0, 230, 255, 0.7);
+}
+
+
+.dark-bg {
+    background-color: #080835;
+}
+
+
+/* User messages (right side) */
+.message.user {
+    background-color: #00e6ff; /* neon cyan bubble */
+    color: #000000; /* black text */
+    align-self: flex-end;
+    margin-left: auto;
+    box-shadow: 0 0 10px rgba(0, 230, 255, 0.7);
+}
+
+/* Assistant messages (left side) */
+.message.assistant {
+    background-color: #2a2a3c; /* dark gray bubble */
+    color: #e0e0e0;
+    align-self: flex-start;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.15);
+}
+
+/* Header */
+.chat-header h4 {
+    color: #00e6ff; /* neon cyan */
+    text-shadow: 0 0 10px rgba(0, 230, 255, 0.7);
+}
+
+/* Status Display */
+.status-display {
+    font-size: 1rem;
+    color: #00e6ff; 
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+}
+
+/* Record Button */
+.record-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #00bfff, #0099cc);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.7);
+}
+
+.record-btn:hover {
+    background: linear-gradient(145deg, #00e6ff, #00bfff);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+}
+
+.record-btn.recording {
+    background: linear-gradient(145deg, #ff1744, #d50000);
+    animation: pulse 1.5s infinite;
+    box-shadow: 0 0 20px rgba(255, 23, 68, 0.8);
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 23, 68, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 20px rgba(255, 23, 68, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 23, 68, 0);
+    }
+}
+
+
