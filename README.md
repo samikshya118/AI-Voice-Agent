@@ -133,6 +133,6 @@ Day 27–28: Settings panel + cloud deployment
 
 Day 29: Final documentation & cleanup
 
-## 🙌 Credits
+🙌 Credits
 
 Thanks to 30 Days of Voice Agents Challenge, AssemblyAI, Murf AI, Google Gemini, and SerpAPI for making this project possible.
