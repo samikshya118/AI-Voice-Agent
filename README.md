@@ -1,107 +1,138 @@
-# 🎯 30 Days of AI Voice Agents Challenge
+# 🎙️ CORA – Conversational Voice Agent
 
-Welcome to my repository for the **30 Days of AI Voice Agents Challenge**!  
-This project documents my journey in building a sophisticated, **voice-activated conversational AI** from the ground up.  
-Over the course of the challenge, a simple webpage evolves into a **fully interactive AI voice agent** capable of holding context-aware conversations.
-
----
-
-## 🤖 About the Project
-This is a hands-on project to build a **voice-based conversational AI** using modern web technologies and powerful AI APIs.  
-You can engage in continuous, **voice-to-voice conversations** with an AI powered by Google's Generative AI (Gemini) LLM.  
-The agent remembers the context of the conversation, enabling **natural follow-up questions** and a more human-like interaction.
-
-The repository is organized **day-by-day**, with each folder representing a step in the development process — from setting up the server to creating a fully functional conversation loop with memory.
+Welcome to the repository for **CORA (Conversational Responsive Agent)**, built as part of the **30 Days of Voice Agents Challenge**.  
+CORA started as a simple FastAPI echo bot and evolved into a **fully deployed, voice-first AI assistant** capable of contextual conversations and natural-sounding responses.
 
 ---
 
-## 🔑 Key Features
-- **🎤 Voice-to-Voice Interaction** – Speak to the agent and receive a spoken response for seamless conversations.
-- **🧠 Contextual Conversations** – Maintains chat history per session for natural, follow-up interactions.
-- **🔗 End-to-End AI Pipeline** – Speech-to-Text → LLM → Text-to-Speech, all fully integrated.
-- **💻 Modern UI** – Minimal, intuitive interface with single-button control and visual feedback for states like *ready*, *recording*, and *thinking*.
-- **🛡️ Robust Error Handling** – Fallback audio responses if an API call fails, ensuring smooth user experience.
+## 🤖 About CORA
+
+CORA is a **voice-driven conversational AI** that listens, understands, and responds naturally. It can:  
+
+- Remember **conversation history** for context-aware replies  
+- Respond with **human-like voice** using TTS  
+- Fetch **live information from the web** when needed  
+- Provide **interactive, voice-to-voice chat** through a simple web interface  
+
+This repository documents the full journey of building CORA, day by day.
 
 ---
 
-## 🛠 Tech Stack
+## ✨ Features
 
-### **Backend**
-- **FastAPI** – High-performance Python API framework
-- **Uvicorn** – ASGI server for running FastAPI
-- **Python-Dotenv** – Manage environment variables
-
-### **Frontend**
-- **HTML, CSS, JavaScript** – Structure, styling, and interactivity
-- **Bootstrap** – Responsive, clean UI components
-- **MediaRecorder API** – Capture audio directly from the browser
-
-### **AI & Voice APIs**
-- **Murf AI** – Natural-sounding Text-to-Speech
-- **AssemblyAI** – Fast and accurate Speech-to-Text
-- **Google Gemini** – Large Language Model for conversational intelligence
+- **🎤 Voice-to-Voice Chat** – Talk naturally and hear AI responses in real-time  
+- **🧠 Conversational Memory** – Maintains context across multiple turns  
+- **⚡ End-to-End AI Pipeline** – STT → LLM → TTS fully integrated  
+- **💻 Minimal, Intuitive UI** – Single-button interface with live feedback  
+- **🛡️ Robust Error Handling** – Fallback audio responses for API failures  
+- **☁️ Cloud Deployment** – Accessible online from anywhere
 
 ---
 
-## 🗂 Architecture
+## 🛠️ Tech Stack
 
-The application follows a **client-server** architecture.  
-The **frontend** handles audio capture and UI, while the **backend** orchestrates transcription, AI processing, and speech synthesis.
+**Backend**  
+- FastAPI – API server  
+- Uvicorn – ASGI server  
+- WebSockets – Real-time streaming  
+- python-dotenv – Environment variable management  
 
-**Conversation Flow:**
-1. **Client** captures voice using the MediaRecorder API.
-2. **FastAPI Server** receives and processes audio.
-3. Audio is sent to **AssemblyAI** for transcription.
-4. Server retrieves chat history and sends transcript to **Google Gemini**.
-5. Gemini generates a conversational response.
-6. Server sends the AI’s text to **Murf AI** for Text-to-Speech.
-7. The client plays back the generated voice response.
+**Frontend**  
+- HTML, CSS, JavaScript – Core UI  
+- Bootstrap – Responsive styling  
+- MediaRecorder API – Capture microphone input  
+- WebSocket API – Audio streaming  
+
+**AI & Voice APIs**  
+- AssemblyAI – Real-time Speech-to-Text  
+- Google Gemini – Conversational LLM  
+- Murf AI – Text-to-Speech  
+- SerpAPI – Web search integration  
+
+**Deployment**  
+- Render.com – Cloud hosting  
 
 ---
 
-## 📸 Screenshot
+## ⚙️ How CORA Works
 
-<img src="pictures/Ai_agent.png" alt="AI Voice Agent Screenshot" width="600">
-
-
-## 🚀 Getting Started
-
-### **Prerequisites**
-- Python 3.8+
-- API Keys for:
-  - **Murf AI**
-  - **AssemblyAI**
-  - **Google Gemini**
+1. User speaks into the microphone 🎤  
+2. Audio is streamed to FastAPI via WebSocket  
+3. AssemblyAI transcribes speech to text  
+4. Text + chat history sent to Gemini LLM → generates response  
+5. Response sent to Murf AI → converts text to speech  
+6. Audio returned to browser and played automatically  
 
 ---
 
 ## 🚀 Getting Started
 
-Follow these steps to set up and run the AI Voice Agent on your local machine.
+### 🔗 Live Demo
+Try CORA here: [https://marvis-voice-agent-l7da.onrender.com/](https://marvis-voice-agent-l7da.onrender.com/)  
 
-### **Prerequisites**
-- Python 3.8+
-- API Keys for:
-  - Murf AI
-  - AssemblyAI
-  - Google Gemini
+1. Click the **settings icon** to enter your API keys  
+2. Grant microphone access  
+3. Start chatting 🎙️  
 
-### **Installation & Running**
+### 💻 Run Locally
+
+**Requirements**  
+- Python 3.8+  
+- API keys for Murf AI, AssemblyAI, Gemini, SerpAPI  
+
+**Steps**  
 ```bash
-# 1. Clone the repository
-git clone https://github.com/samikhya118/AI-Voice-Agent.git
-cd AI-Voice-Agent
+# Clone the repository
+git clone https://github.com/your-username/cora-voice-agent.git
+cd cora-voice-agent/day-29
 
-# 2. Install dependencies
+# Install dependencies
 pip install -r requirements.txt
 
-# 3. Create and configure environment variables
-echo "ASSEMBLYAI_API_KEY=your_key_here" >> .env
-echo "MURF_API_KEY=your_key_here" >> .env
-echo "GOOGLE_API_KEY=your_key_here" >> .env
+# Setup environment variables
+echo 'MURF_API_KEY=your_key
+ASSEMBLYAI_API_KEY=your_key
+GEMINI_API_KEY=your_key
+SERP_API_KEY=your_key' > .env
 
-# 4. Run the FastAPI server
+# Start FastAPI server
 uvicorn main:app --reload
 
-# 5. Open the frontend
-# Simply open index.html in your browser to interact with the AI Voice Agent
+
+CORA/
+├── main.py          # FastAPI entrypoint
+├── services/        # AI integrations
+│   ├── llm.py       # Gemini LLM logic
+│   ├── stt.py       # Speech-to-Text
+│   └── tts.py       # Text-to-Speech
+├── schemas.py       # Data models
+├── templates/       
+│   └── index.html   # Web UI
+├── static/          
+│   ├── script.js    # Frontend logic
+│   └── style.css    # Styling
+├── requirements.txt # Dependencies
+└── .env             # API keys
+
+
+## 🗓️ Journey: Day 1 to Day 29
+
+Day 01–05: FastAPI basics + echo bot
+
+Day 06–09: Added STT & TTS → full voice-to-voice loop
+
+Day 10–15: Memory, persona, modular structure
+
+Day 16–20: Real-time streaming + WebSockets
+
+Day 21–23: Web search integration & function calling
+
+Day 24–26: Polished UI + named the agent CORA
+
+Day 27–28: Settings panel + cloud deployment
+
+Day 29: Final documentation & cleanup
+
+## 🙌 Credits
+
+Thanks to 30 Days of Voice Agents Challenge, AssemblyAI, Murf AI, Google Gemini, and SerpAPI for making this project possible.
