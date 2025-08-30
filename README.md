@@ -115,7 +115,7 @@ CORA/
 └── .env             # API keys
 
 
-##🗓️ Journey: Day 1 to Day 29
+🗓️ Journey: Day 1 to Day 29
 
 Day 01–05: FastAPI basics + echo bot
 
