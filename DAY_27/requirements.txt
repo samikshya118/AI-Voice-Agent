@@ -7,3 +7,4 @@ assemblyai
 google-generativeai
 websockets
 google-search-results
+murfpy
