@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let isPlaying = false;
     let assistantMessageDiv = null;
 
+
     const addOrUpdateMessage = (text, type) => {
         if (type === "assistant") {
             assistantMessageDiv = document.createElement('div');
